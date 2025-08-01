@@ -22,17 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Create custom cursor
-  const cursor = document.createElement('div');
-  cursor.className = 'cursor';
-  document.body.appendChild(cursor);
-
   const cursorFollower = document.createElement('div');
   cursorFollower.className = 'cursor-follower';
   document.body.appendChild(cursorFollower);
 
   // Cursor movement
   let mouseX = 0, mouseY = 0;
-  let cursorX = 0, cursorY = 0;
   let followerX = 0, followerY = 0;
 
   document.addEventListener('mousemove', function(e) {
@@ -41,13 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function animateCursor() {
-    cursorX += (mouseX - cursorX) * 0.1;
-    cursorY += (mouseY - cursorY) * 0.1;
     followerX += (mouseX - followerX) * 0.05;
     followerY += (mouseY - followerY) * 0.05;
 
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
     cursorFollower.style.left = followerX + 'px';
     cursorFollower.style.top = followerY + 'px';
 
@@ -59,11 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const interactiveElements = document.querySelectorAll('a, button, .team-member, .project-card');
   interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'scale(1.5)';
       cursorFollower.style.transform = 'scale(1.5)';
     });
     el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'scale(1)';
       cursorFollower.style.transform = 'scale(1)';
     });
   });
@@ -353,37 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Text scramble effect
-  function scrambleText(element, finalText) {
-    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-    let iteration = 0;
-    
-    const interval = setInterval(() => {
-      element.textContent = finalText
-        .split('')
-        .map((char, index) => {
-          if (index < iteration) {
-            return finalText[index];
-          }
-          return chars[Math.floor(Math.random() * chars.length)];
-        })
-        .join('');
-      
-      if (iteration >= finalText.length) {
-        clearInterval(interval);
-      }
-      
-      iteration += 1 / 3;
-    }, 30);
-  }
-  
-  // Apply scramble effect to navigation links on hover
-  navLinks.forEach(link => {
-    const originalText = link.textContent;
-    link.addEventListener('mouseenter', () => {
-      scrambleText(link, originalText);
-    });
-  });
+
   
   // Floating elements animation
   function createFloatingElements() {
