@@ -4,9 +4,6 @@
   box-sizing: border-box;
 }
 
-
-
-
 .cursor-follower {
   position: fixed;
   width: 40px;
@@ -183,6 +180,14 @@ body {
   overflow: hidden;
 }
 
+.footer .logo-text {
+  color: white;
+}
+
+.footer .logo-text::before {
+  display: none;
+}
+
 .logo-text::before {
   content: '';
   position: absolute;
@@ -281,7 +286,8 @@ body {
 /* Hero Section */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - 50px);
+  padding-top: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -337,7 +343,7 @@ body {
 .hero-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 100px 2rem;
   text-align: center;
   position: relative;
   z-index: 1;
@@ -381,7 +387,7 @@ body {
   }
 }
 
-.title-line.accent {
+.title-line-accent {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -389,7 +395,7 @@ body {
   position: relative;
 }
 
-.title-line.accent::after {
+.title-line-accent::after {
   content: '';
   position: absolute;
   top: 0;
@@ -697,16 +703,20 @@ body {
 }
 
 .member-image {
+  background-color: #d1d5db;
   position: relative;
   height: 300px;
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .member-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   transition: transform 0.3s ease;
+  border-radius: 20px;
 }
 
 .team-member:hover .member-image img {
@@ -726,6 +736,7 @@ body {
   opacity: 0;
   transition: opacity 0.3s ease;
   backdrop-filter: blur(10px);
+  border-radius: 20px;
 }
 
 .team-member:hover .member-overlay {
@@ -866,6 +877,9 @@ body {
 }
 
 .project-card {
+  text-decoration: none;
+  color: inherit;
+  outline: none;
   background: #262626;
   border-radius: 20px;
   overflow: hidden;
@@ -898,6 +912,7 @@ body {
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 1;
+  border-radius: 20px;
 }
 
 .project-card:hover::before {
@@ -910,14 +925,28 @@ body {
   box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
 }
 
-.project-card.featured {
-  grid-column: span 2;
-}
+  .project-card.featured {
+    grid-column: span 2;
+  }
+  
+  .projects-show-more {
+    margin-top: 2rem;
+  }
+  
+  .btn-show-more {
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
+  }
+  
+  .projects-grid-hidden {
+    grid-template-columns: 1fr;
+  }
 
 .project-image {
   position: relative;
   height: 250px;
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .project-card.featured .project-image {
@@ -930,6 +959,7 @@ body {
   object-fit: cover;
   transition: transform 0.3s ease;
   filter: grayscale(20%);
+  border-radius: 20px;
 }
 
 .project-card:hover .project-image img {
@@ -958,6 +988,7 @@ body {
   top: 1rem;
   left: 1rem;
   z-index: 2;
+  border-radius: 20px;
 }
 
 .project-tags {
@@ -1026,8 +1057,10 @@ body {
 }
 
 .metric {
+  max-width: 25%;
   text-align: center;
   position: relative;
+  line-height: 1.2;
 }
 
 .metric-value {
@@ -1061,6 +1094,122 @@ body {
   font-size: 0.8rem;
   color: #9ca3af;
 }
+
+/* Show More Button Styles */
+.projects-show-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.projects-show-more.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-show-more {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-show-more::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-show-more:hover::before {
+  left: 100%;
+}
+
+.btn-show-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.btn-show-more:active {
+  transform: translateY(0);
+}
+
+.btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-icon {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.btn-show-more:hover .btn-icon {
+  transform: translateY(2px);
+}
+
+.btn-show-more.loading {
+  pointer-events: none;
+}
+
+.btn-show-more.loading .btn-text {
+  opacity: 0.7;
+}
+
+.btn-show-more.loading .btn-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* Hidden projects grid */
+.projects-grid-hidden {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.projects-grid-hidden.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.projects-grid-hidden .project-card {
+  animation: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.projects-grid-hidden.show .project-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.projects-grid-hidden .project-card:nth-child(1) { transition-delay: 0.1s; }
+.projects-grid-hidden .project-card:nth-child(2) { transition-delay: 0.2s; }
+.projects-grid-hidden .project-card:nth-child(3) { transition-delay: 0.3s; }
 
 /* Contact Section */
 .contact {
@@ -1133,6 +1282,9 @@ body {
 }
 
 .contact-item {
+  text-decoration: none;
+  color: inherit;
+  outline: none;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -1450,6 +1602,14 @@ body {
   visibility: hidden;
 }
 
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .loader {
   width: 60px;
   height: 60px;
@@ -1485,7 +1645,7 @@ body {
   .nav-toggle {
     display: flex;
   }
-  
+
   .hero-cta {
     flex-direction: column;
     align-items: center;
@@ -1544,10 +1704,6 @@ body {
   }
   
   .nav-container {
-    padding: 0 1rem;
-  }
-  
-  .hero-content {
     padding: 0 1rem;
   }
   

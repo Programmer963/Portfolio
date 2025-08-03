@@ -1,17 +1,17 @@
-// Smooth scrolling for navigation links
+// Loading Screen Implementation
 document.addEventListener('DOMContentLoaded', function() {
-  // Create loading overlay
+  // Create and append loading overlay
   const loadingOverlay = document.createElement('div');
   loadingOverlay.className = 'loading-overlay';
   loadingOverlay.innerHTML = `
-    <div style="text-align: center;">
+    <div class="loading-content">
       <div class="loader"></div>
-      <div class="loading-text">Loading Excellence...</div>
+      <div class="loading-text">Загружаем Ваше решение...</div>
     </div>
   `;
   document.body.appendChild(loadingOverlay);
 
-  // Hide loading overlay after page loads
+  // Hide loading overlay after page load
   window.addEventListener('load', function() {
     setTimeout(() => {
       loadingOverlay.classList.add('hidden');
@@ -21,20 +21,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1500);
   });
 
-  // Create custom cursor
+  // Custom Cursor Implementation
   const cursorFollower = document.createElement('div');
   cursorFollower.className = 'cursor-follower';
   document.body.appendChild(cursorFollower);
 
-  // Cursor movement
   let mouseX = 0, mouseY = 0;
   let followerX = 0, followerY = 0;
 
+  // Track mouse position
   document.addEventListener('mousemove', function(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
   });
 
+  // Animate cursor follower with smooth following
   function animateCursor() {
     followerX += (mouseX - followerX) * 0.05;
     followerY += (mouseY - followerY) * 0.05;
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   animateCursor();
 
-  // Cursor interactions
+  // Interactive elements cursor effect
   const interactiveElements = document.querySelectorAll('a, button, .team-member, .project-card');
   interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
@@ -57,12 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Create particles
+  // Background Particles Animation
   function createParticles() {
     const particles = document.createElement('div');
     particles.className = 'particles';
     document.body.appendChild(particles);
 
+    // Create 50 floating particles
     for (let i = 0; i < 50; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
@@ -74,11 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   createParticles();
 
-  // Create morphing background
+  // Morphing Background Shapes
   function createMorphingBg() {
     const morphingBg = document.createElement('div');
     morphingBg.className = 'morphing-bg';
     
+    // Create 3 morphing shapes
     for (let i = 0; i < 3; i++) {
       const shape = document.createElement('div');
       shape.className = 'morph-shape';
@@ -89,18 +92,17 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   createMorphingBg();
 
-  // Add text reveal animation to hero title
+  // Hero Title Animation Setup
   const titleLines = document.querySelectorAll('.title-line');
   titleLines.forEach(line => {
     const text = line.textContent;
     line.innerHTML = `<span>${text}</span>`;
   });
 
-  // Navigation functionality
+  // Navigation Smooth Scrolling
   const navLinks = document.querySelectorAll('.nav-link');
   const sections = document.querySelectorAll('section[id]');
   
-  // Smooth scrolling
   navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
@@ -117,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Active navigation highlighting
+  // Active Navigation Highlighting
   function updateActiveNav() {
     let current = '';
     sections.forEach(section => {
@@ -138,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   window.addEventListener('scroll', updateActiveNav);
   
-  // Mobile navigation toggle
+  // Mobile Navigation Toggle
   const navToggle = document.querySelector('.nav-toggle');
   const navLinksContainer = document.querySelector('.nav-links');
   
@@ -149,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Navbar background on scroll
+  // Navbar Background on Scroll
   const nav = document.querySelector('.nav');
   function updateNavBackground() {
     if (window.scrollY > 50) {
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   window.addEventListener('scroll', updateNavBackground);
   
-  // Hero CTA buttons functionality
+  // Hero CTA Buttons Functionality
   const exploreCTA = document.querySelector('.btn-primary');
   const teamCTA = document.querySelector('.btn-secondary');
   
@@ -185,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Intersection Observer for animations
+  // Intersection Observer for Animations
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -199,24 +201,63 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, observerOptions);
   
-  // Observe elements for animation
-  const animateElements = document.querySelectorAll('.team-member, .project-card, .section-header, .contact-title, .contact-subtitle, .contact-item, .contact-form');
+  // Observe elements for animation triggers
+  const animateElements = document.querySelectorAll('.team-member, .project-card, .section-header, .contact-title, .contact-subtitle, .contact-item, .contact-form, .projects-show-more');
   animateElements.forEach(el => {
     observer.observe(el);
   });
   
-  // Advanced scroll animations
+  // Show More Projects Functionality
+  const showMoreBtn = document.getElementById('showMoreBtn');
+  const hiddenProjects = document.querySelector('.projects-grid-hidden');
+  let isExpanded = false;
+  
+  if (showMoreBtn && hiddenProjects) {
+    showMoreBtn.addEventListener('click', function() {
+      if (!isExpanded) {
+        hiddenProjects.style.display = 'grid';
+        setTimeout(() => {
+          hiddenProjects.classList.add('show');
+        }, 10);
+        
+        this.querySelector('.btn-text').textContent = 'Скрыть';
+        this.querySelector('.btn-icon').textContent = '↑';
+        this.classList.add('loading');
+        
+        setTimeout(() => {
+          this.classList.remove('loading');
+        }, 600);
+        
+        isExpanded = true;
+      } else {
+        hiddenProjects.classList.remove('show');
+        
+        this.querySelector('.btn-text').textContent = 'Показать еще';
+        this.querySelector('.btn-icon').textContent = '↓';
+        this.classList.add('loading');
+        
+        setTimeout(() => {
+          this.classList.remove('loading');
+          hiddenProjects.style.display = 'none';
+        }, 600);
+        
+        isExpanded = false;
+      }
+    });
+  }
+  
+  // Advanced Scroll Animations
   function handleScrollAnimations() {
     const scrolled = window.pageYOffset;
     const rate = scrolled * -0.5;
     
-    // Parallax effect for hero elements
+    // Parallax effect for hero pattern
     const heroPattern = document.querySelector('.hero-pattern');
     if (heroPattern && scrolled < window.innerHeight) {
       heroPattern.style.transform = `translateY(${rate}px)`;
     }
     
-    // Morphing shapes movement
+    // Morphing shapes movement based on scroll
     const morphShapes = document.querySelectorAll('.morph-shape');
     morphShapes.forEach((shape, index) => {
       const speed = 0.1 + (index * 0.05);
@@ -226,20 +267,18 @@ document.addEventListener('DOMContentLoaded', function() {
   
   window.addEventListener('scroll', handleScrollAnimations);
 
-  // Form submission
+  // Contact Form Submission Simulation
   const contactForm = document.querySelector('.form');
   if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
       e.preventDefault();
       
-      // Get form data
       const formData = new FormData(this);
       const formObject = {};
       formData.forEach((value, key) => {
         formObject[key] = value;
       });
       
-      // Simulate form submission
       const submitBtn = this.querySelector('.btn-primary');
       const originalText = submitBtn.textContent;
       
@@ -262,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Counter animation for stats
+  // Counter Animation for Statistics
   function animateCounters() {
     const counters = document.querySelectorAll('.stat-number');
     
@@ -299,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
     statsObserver.observe(statsSection);
   }
   
-  // Advanced 3D tilt effect for cards
+  // 3D Tilt Effect for Cards
   function addTiltEffect(elements) {
     elements.forEach(element => {
       element.addEventListener('mousemove', function(e) {
@@ -322,11 +361,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Apply tilt effect to cards
-  const tiltElements = document.querySelectorAll('.team-member, .project-card, .stat');
+  const tiltElements = document.querySelectorAll('.team-member, .project-card, .stat, .btn-show-more');
   addTiltEffect(tiltElements);
   
-  // Magnetic effect for buttons
+  // Magnetic Effect for Buttons
   const magneticElements = document.querySelectorAll('.btn-primary, .btn-secondary');
   magneticElements.forEach(element => {
     element.addEventListener('mousemove', function(e) {
@@ -342,9 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-
-  
-  // Floating elements animation
+  // Floating Elements Animation
   function createFloatingElements() {
     const floatingContainer = document.createElement('div');
     floatingContainer.style.cssText = `
@@ -357,6 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
       z-index: -1;
     `;
     
+    // Create 20 floating background elements
     for (let i = 0; i < 20; i++) {
       const element = document.createElement('div');
       element.style.cssText = `
@@ -376,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   createFloatingElements();
   
-  // Smooth reveal for sections
+  // Smooth Reveal for Section Titles and Subtitles
   const revealElements = document.querySelectorAll('.section-title, .section-subtitle');
   revealElements.forEach(element => {
     const text = element.textContent;
@@ -403,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Add CSS for mobile navigation
+// Mobile Responsive Styles
 const style = document.createElement('style');
 style.textContent = `
   @media (max-width: 768px) {
