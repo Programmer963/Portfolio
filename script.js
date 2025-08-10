@@ -1,6 +1,4 @@
-// Loading Screen Implementation
 document.addEventListener('DOMContentLoaded', function() {
-  // Create and append loading overlay
   const loadingOverlay = document.createElement('div');
   loadingOverlay.className = 'loading-overlay';
   loadingOverlay.innerHTML = `
@@ -11,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
   `;
   document.body.appendChild(loadingOverlay);
 
-  // Hide loading overlay after page load
   window.addEventListener('load', function() {
     setTimeout(() => {
       loadingOverlay.classList.add('hidden');
@@ -21,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1500);
   });
 
-  // Custom Cursor Implementation
   const cursorFollower = document.createElement('div');
   cursorFollower.className = 'cursor-follower';
   document.body.appendChild(cursorFollower);
@@ -29,13 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
   let mouseX = 0, mouseY = 0;
   let followerX = 0, followerY = 0;
 
-  // Track mouse position
   document.addEventListener('mousemove', function(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
   });
 
-  // Animate cursor follower with smooth following
   function animateCursor() {
     followerX += (mouseX - followerX) * 0.05;
     followerY += (mouseY - followerY) * 0.05;
@@ -47,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   animateCursor();
 
-  // Interactive elements cursor effect
   const interactiveElements = document.querySelectorAll('a, button, .team-member, .project-card');
   interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
@@ -58,30 +51,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Background Particles Animation
   function createParticles() {
     const particles = document.createElement('div');
     particles.className = 'particles';
     document.body.appendChild(particles);
 
-    // Create 50 floating particles
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 25; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
       particle.style.left = Math.random() * 100 + '%';
       particle.style.animationDelay = Math.random() * 20 + 's';
-      particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+      particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
       particles.appendChild(particle);
     }
   }
   createParticles();
 
-  // Morphing Background Shapes
   function createMorphingBg() {
     const morphingBg = document.createElement('div');
     morphingBg.className = 'morphing-bg';
     
-    // Create 3 morphing shapes
     for (let i = 0; i < 3; i++) {
       const shape = document.createElement('div');
       shape.className = 'morph-shape';
@@ -92,66 +81,81 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   createMorphingBg();
 
-  // Hero Title Animation Setup
   const titleLines = document.querySelectorAll('.title-line');
   titleLines.forEach(line => {
     const text = line.textContent;
     line.innerHTML = `<span>${text}</span>`;
   });
 
-  // Navigation Smooth Scrolling
-  const navLinks = document.querySelectorAll('.nav-link');
-  const sections = document.querySelectorAll('section[id]');
-  
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href');
-      const targetSection = document.querySelector(targetId);
-      
-      if (targetSection) {
-        const offsetTop = targetSection.offsetTop - 80;
-        window.scrollTo({
-          top: offsetTop,
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-  
-  // Active Navigation Highlighting
-  function updateActiveNav() {
-    let current = '';
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - 100;
-      const sectionHeight = section.offsetHeight;
-      if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-        current = section.getAttribute('id');
-      }
-    });
+  function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
     
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
+    function updateActiveNav() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', updateActiveNav);
   }
   
-  window.addEventListener('scroll', updateActiveNav);
+  initNavigation();
   
-  // Mobile Navigation Toggle
   const navToggle = document.querySelector('.nav-toggle');
   const navLinksContainer = document.querySelector('.nav-links');
   
-  if (navToggle) {
+  if (navToggle && navLinksContainer) {
     navToggle.addEventListener('click', function() {
       navLinksContainer.classList.toggle('active');
       this.classList.toggle('active');
+      document.body.classList.toggle('menu-open');
+    });
+    
+    const navLinks = document.querySelectorAll('.nav-links .nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        navLinksContainer.classList.remove('active');
+        navToggle.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+    
+    document.addEventListener('click', function(e) {
+      if (!navToggle.contains(e.target) && !navLinksContainer.contains(e.target)) {
+        navLinksContainer.classList.remove('active');
+        navToggle.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        navLinksContainer.classList.remove('active');
+        navToggle.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      }
     });
   }
   
-  // Navbar Background on Scroll
   const nav = document.querySelector('.nav');
   function updateNavBackground() {
     if (window.scrollY > 50) {
@@ -165,7 +169,14 @@ document.addEventListener('DOMContentLoaded', function() {
   
   window.addEventListener('scroll', updateNavBackground);
   
-  // Hero CTA Buttons Functionality
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+      navLinksContainer.classList.remove('active');
+      navToggle.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    }
+  });
+  
   const exploreCTA = document.querySelector('.btn-primary');
   const teamCTA = document.querySelector('.btn-secondary');
   
@@ -187,7 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Intersection Observer for Animations
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -201,13 +211,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, observerOptions);
   
-  // Observe elements for animation triggers
-  const animateElements = document.querySelectorAll('.team-member, .project-card, .section-header, .contact-title, .contact-subtitle, .contact-item, .contact-form, .projects-show-more');
+  const animateElements = document.querySelectorAll('.team-member, .project-card, .section-header, .contact-title, .contact-subtitle, .contact-item, .contact-form, .projects-show-more, .process-step');
   animateElements.forEach(el => {
     observer.observe(el);
   });
   
-  // Show More Projects Functionality
   const showMoreBtn = document.getElementById('showMoreBtn');
   const hiddenProjects = document.querySelector('.projects-grid-hidden');
   let isExpanded = false;
@@ -246,28 +254,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Advanced Scroll Animations
   function handleScrollAnimations() {
     const scrolled = window.pageYOffset;
-    const rate = scrolled * -0.5;
     
-    // Parallax effect for hero pattern
     const heroPattern = document.querySelector('.hero-pattern');
     if (heroPattern && scrolled < window.innerHeight) {
-      heroPattern.style.transform = `translateY(${rate}px)`;
+      heroPattern.style.transform = `translateY(${scrolled * -0.3}px)`;
     }
-    
-    // Morphing shapes movement based on scroll
-    const morphShapes = document.querySelectorAll('.morph-shape');
-    morphShapes.forEach((shape, index) => {
-      const speed = 0.1 + (index * 0.05);
-      shape.style.transform += ` translateY(${scrolled * speed}px)`;
-    });
   }
   
   window.addEventListener('scroll', handleScrollAnimations);
 
-  // Contact Form Submission Simulation
   const contactForm = document.querySelector('.form');
   if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
@@ -301,7 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Counter Animation for Statistics
   function animateCounters() {
     const counters = document.querySelectorAll('.stat-number');
     
@@ -323,7 +319,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Trigger counter animation when stats section is visible
   const statsSection = document.querySelector('.hero-stats');
   if (statsSection) {
     const statsObserver = new IntersectionObserver(function(entries) {
@@ -338,49 +333,28 @@ document.addEventListener('DOMContentLoaded', function() {
     statsObserver.observe(statsSection);
   }
   
-  // 3D Tilt Effect for Cards
-  function addTiltEffect(elements) {
-    elements.forEach(element => {
-      element.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = (y - centerY) / 10;
-        const rotateY = (centerX - x) / 10;
-        
-        this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-      });
-      
-      element.addEventListener('mouseleave', function() {
-        this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-      });
-    });
-  }
-  
-  const tiltElements = document.querySelectorAll('.team-member, .project-card, .stat, .btn-show-more');
-  addTiltEffect(tiltElements);
-  
-  // Magnetic Effect for Buttons
-  const magneticElements = document.querySelectorAll('.btn-primary, .btn-secondary');
-  magneticElements.forEach(element => {
-    element.addEventListener('mousemove', function(e) {
-      const rect = this.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      
-      this.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+  const hoverElements = document.querySelectorAll('.stat, .btn-show-more');
+  hoverElements.forEach(element => {
+    element.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.02)';
     });
     
     element.addEventListener('mouseleave', function() {
-      this.style.transform = 'translate(0, 0)';
+      this.style.transform = 'scale(1)';
     });
   });
   
-  // Floating Elements Animation
+  const buttonElements = document.querySelectorAll('.btn-primary, .btn-secondary');
+  buttonElements.forEach(element => {
+    element.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.05)';
+    });
+    
+    element.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+    });
+  });
+  
   function createFloatingElements() {
     const floatingContainer = document.createElement('div');
     floatingContainer.style.cssText = `
@@ -393,8 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
       z-index: -1;
     `;
     
-    // Create 20 floating background elements
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 12; i++) {
       const element = document.createElement('div');
       element.style.cssText = `
         position: absolute;
@@ -413,70 +386,70 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   createFloatingElements();
   
-  // Smooth Reveal for Section Titles and Subtitles
-  const revealElements = document.querySelectorAll('.section-title, .section-subtitle');
-  revealElements.forEach(element => {
-    const text = element.textContent;
-    element.innerHTML = text.split('').map(char => 
-      `<span style="display: inline-block; opacity: 0; transform: translateY(20px); transition: all 0.5s ease;">${char === ' ' ? '&nbsp;' : char}</span>`
-    ).join('');
+  const logoTrack = document.querySelector('.logo-track');
+  if (logoTrack) {
+    function updateCarouselAnimation() {
+      const trackWidth = logoTrack.scrollWidth;
+      const containerWidth = logoTrack.parentElement.offsetWidth;
+      
+      if (window.innerWidth <= 480) {
+        logoTrack.style.animation = 'scroll 12s linear infinite';
+      } else if (window.innerWidth <= 768) {
+        logoTrack.style.animation = 'scroll 15s linear infinite';
+      } else {
+        const duration = Math.max(20, (trackWidth / 100) * 2);
+        logoTrack.style.animation = `scroll ${duration}s linear infinite`;
+      }
+    }
     
-    const spans = element.querySelectorAll('span');
-    const revealObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          spans.forEach((span, index) => {
-            setTimeout(() => {
-              span.style.opacity = '1';
-              span.style.transform = 'translateY(0)';
-            }, index * 50);
-          });
-          revealObserver.unobserve(entry.target);
-        }
+    updateCarouselAnimation();
+    
+    if (window.innerWidth > 768) {
+      logoTrack.parentElement.addEventListener('mouseenter', () => {
+        logoTrack.style.animationPlayState = 'paused';
       });
-    }, { threshold: 0.5 });
+      
+      logoTrack.parentElement.addEventListener('mouseleave', () => {
+        logoTrack.style.animationPlayState = 'running';
+      });
+    }
     
-    revealObserver.observe(element);
+    window.addEventListener('resize', updateCarouselAnimation);
+  }
+
+  const revealElements = document.querySelectorAll('.section-title, .section-subtitle');
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  revealElements.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(12px)';
+    el.style.transition = 'all 0.4s ease';
+    revealObserver.observe(el);
+  });
+  
+  const allImages = document.querySelectorAll('img');
+  allImages.forEach(img => {
+    img.addEventListener('error', function() {
+      console.warn('Image failed to load:', this.src);
+      this.style.display = 'none';
+    });
+    
+    img.addEventListener('load', function() {
+      console.log('Image loaded successfully:', this.src);
+    });
   });
 });
 
-// Mobile Responsive Styles
 const style = document.createElement('style');
 style.textContent = `
   @media (max-width: 768px) {
-    .nav-links {
-      position: fixed;
-      top: 80px;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      flex-direction: column;
-      padding: 2rem;
-      transform: translateY(-100%);
-      opacity: 0;
-      transition: all 0.3s ease;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    
-    .nav-links.active {
-      display: flex;
-      transform: translateY(0);
-      opacity: 1;
-    }
-    
-    .nav-toggle.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    
-    .nav-toggle.active span:nth-child(2) {
-      opacity: 0;
-    }
-    
-    .nav-toggle.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-    
     .cursor, .cursor-follower {
       display: none;
     }
